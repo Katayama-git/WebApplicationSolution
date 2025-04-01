@@ -22,7 +22,8 @@
             url: "/Home/GetMessage",　//取得したい文字列やデータがあるネットワーク上の場所をURLで指定する。
             type: "GET",
             success: function (data) {
-                alert("wrong");
+                alert(data.message); 
+                console.log(data)
             },
             error: function (error) {
                 alert("Error");
