@@ -12,9 +12,12 @@
 <script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.6/js/dataTables.fixedColumns.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
 <div id="container" style="width:50%;display:flex;flex-direction:column;align-items:center;">
+
     <h1 style="position:absolute;top:10%;left:22%;">見本</h1>
+
     <button onclick="ClickGetMessage()">Get Message from Server</button>
     <button onclick="ClickGetData()" style="margin-top:20px">Get Data from Database</button>
+
     <div class="card shadow mt-4" style="width:300px">
         <div class="card-body shadow-sm">
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -31,13 +34,35 @@
     </div>
 </div>
 <div style="height:100%;border-right:1px solid black;"></div>
+
 <div style="width:50%;display:flex;flex-direction:column;align-items:center;">
+
     <h1 style="position:absolute;top:10%;right:22%;">演習</h1>
     <!--ここに見本を参考にしてHTMLを書いて下さい-->
     <!--目標１：クリックするとClickGetMessage()を呼び出すボタン要素を書いて下さい-->
     <!--目標２：クリックするとClickGetDataTodo()を呼び出すボタン要素を書いて下さい-->
     <!--目標３：データを表示するためのテーブル要素を書いて下さい-->
+    <button onclick="ClickGetMessage()">Get Message from Sever</button>
+    <button onclick="ClickGetDataTodo()" style="margin-top:20px">Get Data from DataTodo</button>
+    <div class="card shadow mt-4" style="width:300px">
+        <div class="card-body shadow-sm">
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table class="table my-0" id="table1" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center; font-size: 13px;">Id</th>
+                            <th style="text-align:center; font-size: 13px;">Name</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+<div style="height:100%;border-right:1px solid black;"></div>
+
+
+
 <script>
     //Step1の目標：ClickGetMessage()を修正してHomeControllerクラスのGetMessage()から取得したメッセージである文字列をalert()で表示させる。
     //ヒント：console.log()でdataの中を見てみよう。
@@ -55,7 +80,7 @@
     }
 
     function ClickGetData() {
-        $('#table').html('<thead><tr><th style="text-align:center; font-size: 13px;">Id</th><th style="text-align:center; font-size: 13px;">Name</th><tr></thead>');
+        $('#table').html('<thead><tr><th style="text-align:center; font-size: 13px;">Id</th><th style="text-align:center; font-size: 13px;">Name</th></tr></thead>');
         $.ajax({
             url: "/Home/GetData",　//取得したい文字列やデータがあるネットワーク上の場所をURLで指定する。
             type: "GET",
@@ -66,11 +91,14 @@
                     for (var i = 0; i < data.data.length; i++) {
                         var Id = data.data[i].id;  //data.data[i].idでデータのidを取得できる。
                         var Name = "";
-                        if (data.data[i].name != null) { //data.data[i].nameがnullでない場合、データがあるということ。nullを入れようとするとエラーになるので、その場合のために前もって空文字("")を入れる。
-                            Name = data.data[i].name;　//data.data[i].nameでデータのnameを取得できる。
+                        if (data.data[i].name != null) {
+                            //data.data[i].nameがnullでない場合、データがあるということ。nullを入れようとするとエラーになるので、その場合のために前もって空文字("")を入れる。
+                            Name = data.data[i].name;　
+                            //data.data[i].nameでデータのnameを取得できる。
                         }
                         
-                        child.innerHTML += `<tr><td style="text-align:center">${Id}</td><td style="text-align:center">${Name}</td></tr>`　//innerHTMLでHTML要素を追加することができる。ここではテーブルの行を追加している。
+                        child.innerHTML += `<tr><td style="text-align:center">${Id}</td><td style="text-align:center">${Name}</td></tr>`　
+                        //innerHTMLでHTML要素を追加することができる。ここではテーブルの行を追加している。
                     }
                     element.appendChild(child);　 //appendChild()で要素を追加することができる。ここではテーブルの行を追加している。
                 }
@@ -87,6 +115,34 @@
     //Step2の目標：ClickGetDataTodo()を修正してHomeControllerクラスのGetDataTodo()から取得したデータをテーブルに表示させて下さい。
     //ヒント：ClickGetData()を参考にして下さい。
     function ClickGetDataTodo() {
+            $('#table1').html('<thead><tr><th style="text-align:center; font-size: 13px;">Id</th><th style="text-align:center; font-size: 13px;">Name</th></tr></thead>');
+            $.ajax({
+                url: "/Home/GetDataTodo",
+                type: "GET",
+                success: function (data) {
+                    if (data.data.length != 0) {
+                        var element = document.getElementById("table1");
+                        var child = document.createElement("tbody");
+                        for (var i = 0; i < data.data.length; i++) {
+                            var Id = data.data[i].id; 
+                            var Name = "";
+                            if (data.data[i].name != null) {
+                                Name = data.data[i].name;　
+                            }
+
+                            child.innerHTML += `<tr><td style="text-align:center">${Id}</td>
+                                                    <td style="text-align:center">${Name}</td></tr>`　
+                        }
+                        element.appendChild(child);　
+                    }
+                    else {
+                        alert("No data");　
+                    }
+                },
+                error: function (error) {
+                    alert("Error");
+                }
+            });
 
     }
 

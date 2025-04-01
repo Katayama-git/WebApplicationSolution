@@ -27,7 +27,8 @@ namespace WebApplication2.Service
                          select m).ToList();
             if (query != null)
             {
-                for (var i = 0; i < query.Count; i++){ //queryの中にあるリストの長さ分だけ繰り返すfor文
+                for (var i = 0; i < query.Count; i++)
+                { //queryの中にあるリストの長さ分だけ繰り返すfor文
                     HomeViewModel homeViewModel = new HomeViewModel(); //HomeViewModelのインスタンスを作成(データを入れるためのモデルクラス。箱のようなもの)
                     homeViewModel.Id = query[i].Id; //queryのi番目のIdをhomeViewModelのIdに代入
                     homeViewModel.Name = query[i].Name;　//queryのi番目のNameをhomeViewModelのNameに代入
@@ -37,12 +38,24 @@ namespace WebApplication2.Service
             return list;　//listを呼び出し元であるHomeControllerクラスのGetData()に返す
         }
 
-
         //目標:GetDataServiceTodoメソッドを修正し、データベースコンテキストから取得したデータをhomeViewModelに格納して、それらをリスト化して返すようにして下さい。
         //ヒント:GetDataServiceメソッドを参考にして下さい。
         public List<HomeViewModel> GetDataServiceTodo()
         {
-            return null;
+            List<HomeViewModel> List = new List<HomeViewModel>();
+            var query = (from m in _context.User
+                         select m).ToList();
+            if (query != null)
+            {
+                for (var i = 0; i < query.Count; i++)
+                {
+                    HomeViewModel homeViewModel = new HomeViewModel();
+                    homeViewModel.Id = query[i].Id;
+                    homeViewModel.Name = query[i].Name;
+                    List.Add(homeViewModel);
+                }
+            }
+            return List;
         }
     }
 }
