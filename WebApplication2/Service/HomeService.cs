@@ -117,7 +117,20 @@ namespace WebApplication2.Service
         //ヒント:GetDataByIdメソッドを参考にして下さい。
         public HomeViewModel GetDataByIdServiceTodo(int id)
         {
-            return null;
+            var query = (from m in _context.UserTodo
+                         where m.Id == id
+                         select m).ToList();
+            if (query != null)
+            {
+                HomeViewModel homeViewModel = new HomeViewModel();
+                homeViewModel.Id = query[0].Id;
+                homeViewModel.Name = query[0].Name;
+                return homeViewModel;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public bool EditDataService(HomeViewModel viewModel)
